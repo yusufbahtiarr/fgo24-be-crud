@@ -11,5 +11,3 @@ INSERT INTO users (username, email, password) VALUES
 ('dewi_sari', 'dewi.sari@gmail.com', '33333'),
 ('agus_pramono', 'agus.pramono@gmail.com', '44444'),
 ('rina_kusuma', 'rina.kusuma@gmail.com', '55555');
-
-SELECT * FROM users

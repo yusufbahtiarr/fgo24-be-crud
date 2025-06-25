@@ -17,7 +17,7 @@ type User struct {
 
 var Users []User
 
-func AllUser(search string) ([]User, error) {
+func GetAllUsers() ([]User, error) {
 
 	conn, err := utils.DBConnect()
 	if err != nil {
@@ -41,29 +41,27 @@ func AllUser(search string) ([]User, error) {
 	return users, nil
 }
 
-func UserById(user_id string) ([]User, error) {
+func GetUserByID(user_id string) (User, error) {
 	conn, err := utils.DBConnect()
 	if err != nil {
-		return []User{}, err
+		return User{}, err
 	}
 	defer conn.Close()
 
 	query := `SELECT id, username, email, password FROM users WHERE id = $1`
-
 	id, _ := strconv.Atoi(user_id)
 
 	rows, err := conn.Query(context.Background(), query, id)
 	if err != nil {
-		return []User{}, err
+		return User{}, err
 	}
 	defer rows.Close()
-
-	users, err := pgx.CollectRows[User](rows, pgx.RowToStructByName)
+	user, err := pgx.CollectOneRow[User](rows, pgx.RowToStructByName)
 	if err != nil {
-		return []User{}, err
+		return User{}, err
 	}
 
-	return users, nil
+	return user, nil
 
 }
 
@@ -73,10 +71,8 @@ func CreateUser(user User) error {
 		return err
 	}
 	defer conn.Close()
-
-	query := `INSERT INTO users (username, email password) VALUES ($1, $2, $3, md5($4))
+	query := `INSERT INTO users (username, email, password) VALUES ($1, $2, $3, $4))
 	`
-
 	_, err = conn.Exec(context.Background(), query, user.Username, user.Email, user.Password)
 	if err != nil {
 		return err
@@ -101,5 +97,33 @@ func DeleteUser(id string) error {
 		return err
 	}
 
+	return nil
+}
+
+func UpdateUser(id string, newdata User) error {
+	// conn, err := utils.DBConnect()
+	// if err != nil {
+	// 	return err
+	// }
+	// defer conn.Conn().Close(context.Background)
+
+	// olddata, err := GetUserByID(id)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// if newdata.Username != "" {
+	// 	olddata.Username = newdata.Username
+	// }
+	// if newdata.Email != "" {
+	// 	olddata.Email = newdata.Email
+	// }
+	// if newdata.Password != "" {
+	// 	olddata.Password = newdata.Password
+	// }
+
+	// _, err := conn.Exec(context.Background(), `UPDATE users SET username = $1, email = $2, password = $3 WHERE id = $4`, olddata.Username, olddata.Email, olddata.Password, id)
+
+	// return err
 	return nil
 }
