@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"fgo24-be-crud/utils"
+	"fmt"
 	"strconv"
 
 	"github.com/jackc/pgx/v5"
@@ -17,7 +18,7 @@ type User struct {
 
 var Users []User
 
-func GetAllUsers() ([]User, error) {
+func FindAllUsers() ([]User, error) {
 
 	conn, err := utils.DBConnect()
 	if err != nil {
@@ -41,7 +42,7 @@ func GetAllUsers() ([]User, error) {
 	return users, nil
 }
 
-func GetUserByID(user_id string) (User, error) {
+func FindUserByID(user_id int) (User, error) {
 	conn, err := utils.DBConnect()
 	if err != nil {
 		return User{}, err
@@ -49,20 +50,18 @@ func GetUserByID(user_id string) (User, error) {
 	defer conn.Close()
 
 	query := `SELECT id, username, email, password FROM users WHERE id = $1`
-	id, _ := strconv.Atoi(user_id)
-
-	rows, err := conn.Query(context.Background(), query, id)
+	rows, err := conn.Query(context.Background(), query, user_id)
 	if err != nil {
 		return User{}, err
 	}
 	defer rows.Close()
+
 	user, err := pgx.CollectOneRow[User](rows, pgx.RowToStructByName)
 	if err != nil {
 		return User{}, err
 	}
 
 	return user, nil
-
 }
 
 func CreateUser(user User) error {
@@ -71,8 +70,7 @@ func CreateUser(user User) error {
 		return err
 	}
 	defer conn.Close()
-	query := `INSERT INTO users (username, email, password) VALUES ($1, $2, $3, $4))
-	`
+	query := `INSERT INTO users (username, email, password) VALUES ($1, $2, $3)`
 	_, err = conn.Exec(context.Background(), query, user.Username, user.Email, user.Password)
 	if err != nil {
 		return err
@@ -100,30 +98,34 @@ func DeleteUser(id string) error {
 	return nil
 }
 
-func UpdateUser(id string, newdata User) error {
-	// conn, err := utils.DBConnect()
-	// if err != nil {
-	// 	return err
-	// }
-	// defer conn.Conn().Close(context.Background)
+func UpdateUser(id int, newdata User) error {
+	conn, err := utils.DBConnect()
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
 
-	// olddata, err := GetUserByID(id)
-	// if err != nil {
-	// 	return err
-	// }
+	olddata, err := FindUserByID(id)
+	if err != nil {
+		return err
+	}
 
-	// if newdata.Username != "" {
-	// 	olddata.Username = newdata.Username
-	// }
-	// if newdata.Email != "" {
-	// 	olddata.Email = newdata.Email
-	// }
-	// if newdata.Password != "" {
-	// 	olddata.Password = newdata.Password
-	// }
+	if newdata.Username == "" && newdata.Email == "" && newdata.Password == "" {
+		return fmt.Errorf("input data must not be empty")
+	}
 
-	// _, err := conn.Exec(context.Background(), `UPDATE users SET username = $1, email = $2, password = $3 WHERE id = $4`, olddata.Username, olddata.Email, olddata.Password, id)
+	if newdata.Username != "" {
+		olddata.Username = newdata.Username
+	}
+	if newdata.Email != "" {
+		olddata.Email = newdata.Email
+	}
+	if newdata.Password != "" {
+		olddata.Password = newdata.Password
+	}
 
-	// return err
-	return nil
+	_, err = conn.Exec(context.Background(), `UPDATE users SET username = $1, email = $2, password = $3	WHERE id = $4
+	`, olddata.Username, olddata.Email, olddata.Password, id)
+
+	return err
 }

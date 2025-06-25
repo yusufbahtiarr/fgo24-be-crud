@@ -4,12 +4,13 @@ import (
 	"fgo24-be-crud/models"
 	"fgo24-be-crud/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetAllUsers(ctx *gin.Context) {
-	users, err := models.GetAllUsers()
+	users, err := models.FindAllUsers()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.Response{
 			Success: false,
@@ -25,8 +26,17 @@ func GetAllUsers(ctx *gin.Context) {
 }
 
 func GetUserByID(ctx *gin.Context) {
-	id := ctx.Param("id")
-	user, err := models.GetUserByID(id)
+	idx := ctx.Param("id")
+	id, err := strconv.Atoi(idx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.Response{
+			Success: false,
+			Message: "Invalid user ID",
+		})
+		return
+	}
+
+	user, err := models.FindUserByID(id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.Response{
 			Success: false,
@@ -85,4 +95,38 @@ func CreateUser(ctx *gin.Context) {
 }
 
 func UpdateUser(ctx *gin.Context) {
+	idx := ctx.Param("id")
+	id, err := strconv.Atoi(idx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.Response{
+			Success: false,
+			Message: "Invalid user ID",
+		})
+		return
+	}
+
+	newData := models.User{}
+	err = ctx.ShouldBind(&newData)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, utils.Response{
+			Success: false,
+			Message: "Invalid input",
+		})
+		return
+	}
+
+	err = models.UpdateUser(id, newData)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, utils.Response{
+			Success: false,
+			Message: "Failed Update User",
+			Errors:  err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, utils.Response{
+		Success: true,
+		Message: "Success Update User",
+	})
 }
