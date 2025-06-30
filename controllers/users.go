@@ -9,6 +9,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Description List All Users
+// @Tags json
+// @Accept json
+// @Produce json
+// @Success 200 {string} string "string"
+// @Router /users [get]
 func GetAllUsers(ctx *gin.Context) {
 	users, err := models.FindAllUsers()
 	if err != nil {

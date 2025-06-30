@@ -1,0 +1,22 @@
+basePath: /
+info:
+  contact: {}
+  description: This Simple CRUD server
+  title: CRUD Users
+  version: "1.0"
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: List All Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: string
+          schema:
+            type: string
+      tags:
+      - json
+swagger: "2.0"
