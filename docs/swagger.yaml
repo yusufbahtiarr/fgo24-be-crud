@@ -1,4 +1,26 @@
 basePath: /
+definitions:
+  models.CreateUserRequest:
+    properties:
+      email:
+        example: yusuf@gmail.com
+        type: string
+      password:
+        example: log123
+        type: string
+      username:
+        example: yusuf_bahtr
+        type: string
+    type: object
+  utils.Response:
+    properties:
+      errors: {}
+      message:
+        type: string
+      results: {}
+      success:
+        type: boolean
+    type: object
 info:
   contact: {}
   description: This Simple CRUD server
@@ -18,8 +40,50 @@ paths:
           schema:
             type: string
       tags:
-      - json
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create User
+      parameters:
+      - description: User data
+        in: body
+        name: users
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: string
+          schema:
+            $ref: '#/definitions/models.CreateUserRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      tags:
+      - users
   /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: string
+          schema:
+            type: string
+      tags:
+      - users
     get:
       consumes:
       - application/json
@@ -37,5 +101,23 @@ paths:
           schema:
             type: string
       tags:
-      - json
+      - users
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: string
+          schema:
+            type: string
+      tags:
+      - users
 swagger: "2.0"

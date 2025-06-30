@@ -10,10 +10,16 @@ import (
 )
 
 type User struct {
-	Id       int    `form:"id" db:"id"`
-	Username string `form:"username" db:"username"`
-	Email    string `form:"email" db:"email"`
-	Password string `form:"password" db:"password"`
+	Id       int    `json:"id" db:"id"`
+	Username string `json:"username" db:"username"`
+	Email    string `json:"email" db:"email"`
+	Password string `json:"password" db:"password"`
+}
+
+type CreateUserRequest struct {
+	Username string `json:"username" example:"yusuf_bahtr"`
+	Email    string `json:"email" example:"yusuf@gmail.com"`
+	Password string `json:"password" example:"log123"`
 }
 
 var Users []User

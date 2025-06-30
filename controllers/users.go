@@ -10,7 +10,7 @@ import (
 )
 
 // @Description List All Users
-// @Tags json
+// @Tags users
 // @Accept json
 // @Produce json
 // @Success 200 {string} string "string"
@@ -31,13 +31,13 @@ func GetAllUsers(ctx *gin.Context) {
 	})
 }
 
-// @Descrition Detail User By ID
-// @Tags json
-// @Accept json
-// @Produce json
-// @Param id path int true "User ID"
-// @Success 200 {string} string "string"
-// @Router /users/{id} [get]
+// @Descrition 	Detail User By ID
+// @Tags 				users
+// @Accept 			json
+// @Produce 		json
+// @Param 			id 		path int 	true 		"User ID"
+// @Success 		200 	{string} 	string 	"string"
+// @Router 			/users/{id} 		[get]
 func GetUserByID(ctx *gin.Context) {
 	idx := ctx.Param("id")
 	id, err := strconv.Atoi(idx)
@@ -63,6 +63,13 @@ func GetUserByID(ctx *gin.Context) {
 	})
 }
 
+// @Descrition Delete User By ID
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {string} string "string"
+// @Router /users/{id} [delete]
 func DeleteUser(ctx *gin.Context) {
 	id := ctx.Param("id")
 	err := models.DeleteUser(id)
@@ -80,9 +87,17 @@ func DeleteUser(ctx *gin.Context) {
 
 }
 
+// @Description Create User
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param users body models.CreateUserRequest true "User data"
+// @Success 200 {object} models.CreateUserRequest "string"
+// @Failure 400 {object} utils.Response
+// @Router /users [post]
 func CreateUser(ctx *gin.Context) {
 	user := models.User{}
-	ctx.ShouldBind(&user)
+	ctx.ShouldBindJSON(&user)
 
 	if user.Username == "" || user.Email == "" || user.Password == "" {
 		ctx.JSON(http.StatusBadRequest, utils.Response{
@@ -107,6 +122,13 @@ func CreateUser(ctx *gin.Context) {
 	})
 }
 
+// @Descrition Update User By ID
+// @Tags users
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {string} string "string"
+// @Router /users/{id} [patch]
 func UpdateUser(ctx *gin.Context) {
 	idx := ctx.Param("id")
 	id, err := strconv.Atoi(idx)
