@@ -4,6 +4,7 @@ A simple User Management RESTful API built with Go, Gin framework, and PostgreSQ
 This project demonstrates how to build a modular and scalable backend with key features such as:
 
 - CRUD operations (Create, Read, Update, Delete)
+- File upload functionality
 - PostgreSQL integration using pgx
 - API documentation using Swagger (with annotations)
 
