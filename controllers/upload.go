@@ -9,6 +9,16 @@ import (
 	"github.com/google/uuid"
 )
 
+// UploadFile godoc
+// @Summary Upload a file
+// @Description Upload a file to server
+// @Tags upload
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "File to upload"
+// @Success 200 {object} utils.Response
+// @Success 400 {object} utils.Response
+// @Router /upload [post]
 func UploadFile(ctx *gin.Context) {
 	file, err := ctx.FormFile("file")
 	if err != nil {

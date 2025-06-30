@@ -27,6 +27,31 @@ info:
   title: CRUD Users
   version: "1.0"
 paths:
+  /upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a file to server
+      parameters:
+      - description: File to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Upload a file
+      tags:
+      - upload
   /users:
     get:
       consumes:
