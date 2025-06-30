@@ -31,6 +31,13 @@ func GetAllUsers(ctx *gin.Context) {
 	})
 }
 
+// @Descrition Detail User By ID
+// @Tags json
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {string} string "string"
+// @Router /users/{id} [get]
 func GetUserByID(ctx *gin.Context) {
 	idx := ctx.Param("id")
 	id, err := strconv.Atoi(idx)

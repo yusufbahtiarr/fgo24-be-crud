@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	// docs "github.com/yusufbahtiarr/go-crud2/docs"
+	// docs "github.com/yusufbahtiarr/fgo24-be-crud/docs"
 )
 
 func CombineRouter(r *gin.Engine) {
