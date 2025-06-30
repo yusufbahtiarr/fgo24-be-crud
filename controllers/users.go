@@ -122,12 +122,16 @@ func CreateUser(ctx *gin.Context) {
 	})
 }
 
-// @Descrition Update User By ID
+// UpdateUser godoc
+// @Summary Update user data
+// @Description Update existing user's information
 // @Tags users
 // @Accept json
 // @Produce json
 // @Param id path int true "User ID"
-// @Success 200 {string} string "string"
+// @Param user body models.UpdateUserRequest true "User update data"
+// @Success 200 {object} models.UpdateUserRequest
+// @Failure 400 {object} utils.Response
 // @Router /users/{id} [patch]
 func UpdateUser(ctx *gin.Context) {
 	idx := ctx.Param("id")

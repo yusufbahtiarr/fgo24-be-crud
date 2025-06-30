@@ -170,6 +170,7 @@ const docTemplate = `{
                 }
             },
             "patch": {
+                "description": "Update existing user's information",
                 "consumes": [
                     "application/json"
                 ],
@@ -179,6 +180,7 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
+                "summary": "Update user data",
                 "parameters": [
                     {
                         "type": "integer",
@@ -186,13 +188,28 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "User update data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateUserRequest"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "string",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.UpdateUserRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/utils.Response"
                         }
                     }
                 }
@@ -201,6 +218,23 @@ const docTemplate = `{
     },
     "definitions": {
         "models.CreateUserRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "yusuf@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "log123"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "yusuf_bahtr"
+                }
+            }
+        },
+        "models.UpdateUserRequest": {
             "type": "object",
             "properties": {
                 "email": {

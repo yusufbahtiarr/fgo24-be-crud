@@ -22,6 +22,12 @@ type CreateUserRequest struct {
 	Password string `json:"password" example:"log123"`
 }
 
+type UpdateUserRequest struct {
+	Username *string `json:"username" example:"yusuf_bahtr"`
+	Email    *string `json:"email" example:"yusuf@gmail.com"`
+	Password *string `json:"password" example:"log123"`
+}
+
 var Users []User
 
 func FindAllUsers() ([]User, error) {

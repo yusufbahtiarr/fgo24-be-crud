@@ -12,6 +12,18 @@ definitions:
         example: yusuf_bahtr
         type: string
     type: object
+  models.UpdateUserRequest:
+    properties:
+      email:
+        example: yusuf@gmail.com
+        type: string
+      password:
+        example: log123
+        type: string
+      username:
+        example: yusuf_bahtr
+        type: string
+    type: object
   utils.Response:
     properties:
       errors: {}
@@ -130,19 +142,31 @@ paths:
     patch:
       consumes:
       - application/json
+      description: Update existing user's information
       parameters:
       - description: User ID
         in: path
         name: id
         required: true
         type: integer
+      - description: User update data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateUserRequest'
       produces:
       - application/json
       responses:
         "200":
-          description: string
+          description: OK
           schema:
-            type: string
+            $ref: '#/definitions/models.UpdateUserRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.Response'
+      summary: Update user data
       tags:
       - users
 swagger: "2.0"
