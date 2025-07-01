@@ -30,16 +30,17 @@ type UpdateUserRequest struct {
 
 var Users []User
 
-func FindAllUsers() ([]User, error) {
+func FindAllUsers(search string) ([]User, error) {
 	conn, err := utils.DBConnect()
 	if err != nil {
 		return []User{}, err
 	}
 	defer conn.Close()
+	search = "%" + search + "%"
 
-	query := `SELECT id, username, email, password FROM users`
+	query := `SELECT id, username, email, password FROM users WHERE username ILIKE $1`
 
-	rows, err := conn.Query(context.Background(), query)
+	rows, err := conn.Query(context.Background(), query, search)
 	if err != nil {
 		return []User{}, err
 	}

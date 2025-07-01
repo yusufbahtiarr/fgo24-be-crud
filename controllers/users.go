@@ -22,6 +22,9 @@ import (
 // @Success 200 {string} string "string"
 // @Router /users [get]
 func GetAllUsers(ctx *gin.Context) {
+	search := ctx.Query("search")
+	fmt.Println("search: ", search)
+
 	err := utils.RedisClient.Ping(context.Background()).Err()
 	noredis := false
 	if err != nil {
@@ -49,7 +52,8 @@ func GetAllUsers(ctx *gin.Context) {
 		}
 	}
 
-	users, err := models.FindAllUsers()
+	users, err := models.FindAllUsers(search)
+	fmt.Println("ctr users:", users)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.Response{
 			Success: false,
