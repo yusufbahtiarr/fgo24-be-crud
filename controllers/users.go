@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -95,6 +96,22 @@ func GetUserByID(ctx *gin.Context) {
 		return
 	}
 
+	key := fmt.Sprintf("/users/%d", id)
+
+	data := utils.RedisClient.Get(context.Background(), key)
+	if err = data.Err(); err == nil {
+		var user models.User
+		if err = json.Unmarshal([]byte(data.Val()), &user); err == nil {
+			ctx.JSON(http.StatusOK, utils.Response{
+				Success: true,
+				Message: "Get user id from redis",
+				Results: user,
+			})
+			return
+		}
+
+	}
+
 	user, err := models.FindUserByID(id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.Response{
@@ -102,6 +119,10 @@ func GetUserByID(ctx *gin.Context) {
 			Message: "Failed show user by id",
 		})
 	}
+
+	encoded, _ := json.Marshal(user)
+	utils.RedisClient.Set(context.Background(), key, encoded, time.Minute*5)
+
 	ctx.JSON(http.StatusOK, utils.Response{
 		Success: true,
 		Message: "Success show user by id",
