@@ -96,9 +96,9 @@ func GetUserByID(ctx *gin.Context) {
 		return
 	}
 
-	key := fmt.Sprintf("/users/%d", id)
+	// key := fmt.Sprintf("/users/%d", id)
 
-	data := utils.RedisClient.Get(context.Background(), key)
+	data := utils.RedisClient.Get(context.Background(), ctx.Request.RequestURI)
 	if err = data.Err(); err == nil {
 		var user models.User
 		if err = json.Unmarshal([]byte(data.Val()), &user); err == nil {
@@ -121,7 +121,7 @@ func GetUserByID(ctx *gin.Context) {
 	}
 
 	encoded, _ := json.Marshal(user)
-	utils.RedisClient.Set(context.Background(), key, encoded, time.Minute*5)
+	utils.RedisClient.Set(context.Background(), ctx.Request.RequestURI, encoded, time.Minute*5)
 
 	ctx.JSON(http.StatusOK, utils.Response{
 		Success: true,
