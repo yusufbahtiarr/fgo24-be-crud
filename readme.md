@@ -13,6 +13,18 @@ Designed for clarity, maintainability, and as a solid foundation for more advanc
 
 ---
 
+## API Endpoints Documentation
+
+The following table lists the available API endpoints for managing users:
+
+| Method | Endpoint     | Description    | Query Parameters             |
+| ------ | ------------ | -------------- | ---------------------------- |
+| GET    | `/users`     | Get List Users | ?search=[keyword] (optional) |
+| POST   | `/users`     | Create User    | -                            |
+| GET    | `/users/:id` | Detail User    | -                            |
+| PATCH  | `/users/:id` | Update User    | -                            |
+| DELETE | `/users/:id` | Delete User    | -                            |
+
 ## How to Clone and Use
 
 Make sure you have Golang installed on your device.
