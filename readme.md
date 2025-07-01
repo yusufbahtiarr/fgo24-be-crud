@@ -7,6 +7,7 @@ This project demonstrates how to build a modular and scalable backend with key f
 - File upload functionality
 - PostgreSQL integration using pgx
 - API documentation using Swagger (with annotations)
+- Redis caching for improved performance on selected endpoints
 
 Designed for clarity, maintainability, and as a solid foundation for more advanced applications.
 
@@ -28,7 +29,24 @@ git clone https://github.com/yusufbahtiarr/fgo24-be-crud.git
 cd fgo24-be-crud
 ```
 
-#### 3. Run the program
+#### 3. Setup .env
+
+Create a .env file in the root folder with the following variables:
+
+```
+APP_PORT= (co:8800)
+PGHOST=
+PGPORT=
+PGDATABASE= (co:postgres)
+PGUSER=
+PGPASSWORD=
+REDIS_ADDR= (co:localhost:6379)
+REDIS_PASSWORD=
+REDIS_DB=
+
+```
+
+#### 4. Run the program
 
 ```
 go run main.go
