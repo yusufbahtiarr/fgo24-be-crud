@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	"context"
+	"encoding/json"
 	"fgo24-be-crud/models"
 	"fgo24-be-crud/utils"
+	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,6 +20,33 @@ import (
 // @Success 200 {string} string "string"
 // @Router /users [get]
 func GetAllUsers(ctx *gin.Context) {
+	err := utils.RedisClient.Ping(context.Background()).Err()
+	noredis := false
+	if err != nil {
+		if strings.Contains(err.Error(), "refused") {
+			noredis = true
+		}
+	}
+
+	if !noredis {
+		result := utils.RedisClient.Exists(context.Background(), ctx.Request.RequestURI)
+		if result.Val() != 0 {
+			users := models.User{}
+			data := utils.RedisClient.Get(context.Background(), ctx.Request.RequestURI)
+			str := data.Val()
+			if err = json.Unmarshal([]byte(str), &users); err != nil {
+				log.Println("Unmarshal error:", err)
+			} else {
+				ctx.JSON(http.StatusOK, utils.Response{
+					Success: true,
+					Message: "List all users",
+					Results: users,
+				})
+			}
+			return
+		}
+	}
+
 	users, err := models.FindAllUsers()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, utils.Response{

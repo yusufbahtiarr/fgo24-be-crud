@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 	"fgo24-be-crud/utils"
 	"fmt"
 	"strconv"
@@ -31,27 +32,47 @@ type UpdateUserRequest struct {
 var Users []User
 
 func FindAllUsers() ([]User, error) {
+	results := utils.RedisClient.Exists(context.Background(), "all-users")
+	if results.Val() == 0 {
+		conn, err := utils.DBConnect()
+		if err != nil {
+			return []User{}, err
+		}
+		defer conn.Close()
 
-	conn, err := utils.DBConnect()
-	if err != nil {
-		return []User{}, err
+		query := `SELECT id, username, email, password FROM users`
+
+		rows, err := conn.Query(context.Background(), query)
+		if err != nil {
+			return []User{}, err
+		}
+		defer rows.Close()
+
+		users, err := pgx.CollectRows[User](rows, pgx.RowToStructByName)
+		if err != nil {
+			return []User{}, err
+		}
+
+		encoded, err := json.Marshal(users)
+		if err != nil {
+			return []User{}, err
+		}
+
+		utils.RedisClient.Set(context.Background(), "all-users", string(encoded), 0)
+
+		return users, nil
+	} else {
+		data := utils.RedisClient.Get(context.Background(), "all-users")
+		str := data.Val()
+
+		var users []User
+		err := json.Unmarshal([]byte(str), &users)
+		if err != nil {
+			return nil, fmt.Errorf("failed to unmarshal users from redis: %w", err)
+		}
+
+		return users, nil
 	}
-	defer conn.Close()
-
-	query := `SELECT id, username, email, password FROM users`
-
-	rows, err := conn.Query(context.Background(), query)
-	if err != nil {
-		return []User{}, err
-	}
-	defer rows.Close()
-
-	users, err := pgx.CollectRows[User](rows, pgx.RowToStructByName)
-	if err != nil {
-		return []User{}, err
-	}
-
-	return users, nil
 }
 
 func FindUserByID(user_id int) (User, error) {
