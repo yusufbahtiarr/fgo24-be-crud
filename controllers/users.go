@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fgo24-be-crud/models"
 	"fgo24-be-crud/utils"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -39,7 +40,7 @@ func GetAllUsers(ctx *gin.Context) {
 			} else {
 				ctx.JSON(http.StatusOK, utils.Response{
 					Success: true,
-					Message: "List all users",
+					Message: "List all users (from Redis)",
 					Results: users,
 				})
 			}
@@ -55,6 +56,20 @@ func GetAllUsers(ctx *gin.Context) {
 		})
 		return
 	}
+
+	if !noredis {
+		encoded, err := json.Marshal(users)
+		if err != nil {
+			fmt.Println(err)
+			ctx.JSON(http.StatusInternalServerError, utils.Response{
+				Success: false,
+				Message: "Failed to get user from database",
+			})
+			return
+		}
+		utils.RedisClient.Set(context.Background(), ctx.Request.RequestURI, string(encoded), 0)
+	}
+
 	ctx.JSON(http.StatusOK, utils.Response{
 		Success: true,
 		Message: "Success show all users",
