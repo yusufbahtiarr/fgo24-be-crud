@@ -122,6 +122,7 @@ func GetUserByID(ctx *gin.Context) {
 			Success: false,
 			Message: "Failed show user by id",
 		})
+		return
 	}
 
 	encoded, _ := json.Marshal(user)
@@ -190,6 +191,7 @@ func CreateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, utils.Response{
 		Success: true,
 		Message: "Success Create User",
+		Results: user,
 	})
 }
 

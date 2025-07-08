@@ -3,25 +3,19 @@ definitions:
   models.CreateUserRequest:
     properties:
       email:
-        example: yusuf@gmail.com
         type: string
       password:
-        example: log123
         type: string
       username:
-        example: yusuf_bahtr
         type: string
     type: object
   models.UpdateUserRequest:
     properties:
       email:
-        example: yusuf@gmail.com
         type: string
       password:
-        example: log123
         type: string
       username:
-        example: yusuf_bahtr
         type: string
     type: object
   utils.Response:

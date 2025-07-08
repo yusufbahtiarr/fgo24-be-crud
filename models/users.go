@@ -17,15 +17,15 @@ type User struct {
 }
 
 type CreateUserRequest struct {
-	Username string `json:"username" example:"yusuf_bahtr"`
-	Email    string `json:"email" example:"yusuf@gmail.com"`
-	Password string `json:"password" example:"log123"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type UpdateUserRequest struct {
-	Username *string `json:"username" example:"yusuf_bahtr"`
-	Email    *string `json:"email" example:"yusuf@gmail.com"`
-	Password *string `json:"password" example:"log123"`
+	Username *string `json:"username"`
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
 }
 
 var Users []User

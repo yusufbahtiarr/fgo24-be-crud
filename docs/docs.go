@@ -221,16 +221,13 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string",
-                    "example": "yusuf@gmail.com"
+                    "type": "string"
                 },
                 "password": {
-                    "type": "string",
-                    "example": "log123"
+                    "type": "string"
                 },
                 "username": {
-                    "type": "string",
-                    "example": "yusuf_bahtr"
+                    "type": "string"
                 }
             }
         },
@@ -238,16 +235,13 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string",
-                    "example": "yusuf@gmail.com"
+                    "type": "string"
                 },
                 "password": {
-                    "type": "string",
-                    "example": "log123"
+                    "type": "string"
                 },
                 "username": {
-                    "type": "string",
-                    "example": "yusuf_bahtr"
+                    "type": "string"
                 }
             }
         },
