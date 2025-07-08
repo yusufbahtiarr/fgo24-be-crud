@@ -13,9 +13,9 @@ var RedisClient *redis.Client
 func Redis() error {
 	godotenv.Load()
 
-	redisAddr := os.Getenv("REDIS_ADDR")
-	redisPassword := os.Getenv("REDIS_PASSWORD")
-	redisDB, _ := strconv.Atoi(os.Getenv("REDIS_DB"))
+	redisAddr := os.Getenv("RDADDRESS")
+	redisPassword := os.Getenv("RDPASSWORD")
+	redisDB, _ := strconv.Atoi(os.Getenv("RDDB"))
 
 	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     redisAddr,
