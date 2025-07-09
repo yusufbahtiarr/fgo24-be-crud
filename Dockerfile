@@ -13,4 +13,6 @@ WORKDIR /app
 COPY --from=build /buildapp/gocrud /app/gocrud
 COPY .env /app/.env
 
+EXPOSE 8888
+
 ENTRYPOINT ["/app/gocrud"]
