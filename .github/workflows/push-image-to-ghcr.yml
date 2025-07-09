@@ -25,7 +25,7 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -v -o StrictHostKeyChecking=no -p 9701 yusuf@146.190.102.54 << 'EOF'
-            cd /home/yusuf/deploy/fgo24-backend
+            cd ~/deploy/fgo24-be-crud
             docker-compose pull
             docker-compose down
             docker-compose up -d
