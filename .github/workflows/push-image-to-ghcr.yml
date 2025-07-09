@@ -24,9 +24,9 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -i auth-server -p 9701 yusuf@146.190.102.54 << 'EOF'
-           cd /home/yusuf/deploy/fgo24-backend
-           docker-compose pull
-           docker-compose down
-           docker-compose up -d
+          ssh -v -o StrictHostKeyChecking=no -p 9701 yusuf@146.190.102.54 << 'EOF'
+            cd /home/yusuf/deploy/fgo24-backend
+            docker-compose pull
+            docker-compose down
+            docker-compose up -d
           EOF
